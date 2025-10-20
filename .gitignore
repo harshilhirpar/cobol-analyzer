@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+*.json
+*.md
+!README.md
+venv/
+.venv/
+*.swp
+.idea/
+.vscode/

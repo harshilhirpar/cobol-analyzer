@@ -1,0 +1,58 @@
+IDENTIFICATION DIVISION.
+       PROGRAM-ID. PAYROLL-CALC.
+       AUTHOR. TEST.
+       
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT EMPLOYEE-FILE ASSIGN TO "EMPDATA.DAT"
+           ORGANIZATION IS LINE SEQUENTIAL.
+           SELECT PAYROLL-FILE ASSIGN TO "PAYROLL.DAT"
+           ORGANIZATION IS LINE SEQUENTIAL.
+       
+       DATA DIVISION.
+       FILE SECTION.
+       FD EMPLOYEE-FILE.
+       01 EMPLOYEE-RECORD.
+          05 EMP-ID           PIC 9(6).
+          05 EMP-NAME         PIC X(30).
+          05 EMP-SALARY       PIC 9(7)V99.
+       
+       WORKING-STORAGE SECTION.
+       01 WS-TAX-RATE         PIC 9V99 VALUE 0.20.
+       01 WS-NET-PAY          PIC 9(7)V99.
+       
+       PROCEDURE DIVISION.
+       MAIN-LOGIC.
+           PERFORM INITIALIZE-FILES
+           PERFORM PROCESS-RECORDS
+           PERFORM CLEANUP
+           STOP RUN.
+       
+       INITIALIZE-FILES.
+           OPEN INPUT EMPLOYEE-FILE
+           OPEN OUTPUT PAYROLL-FILE.
+       
+       PROCESS-RECORDS.
+           READ EMPLOYEE-FILE
+               AT END MOVE 'Y' TO WS-EOF-FLAG
+           END-READ
+           PERFORM UNTIL WS-EOF-FLAG = 'Y'
+               PERFORM CALCULATE-PAY
+               PERFORM WRITE-PAYROLL
+               CALL "AUDIT-LOG"
+               CALL "TAX-CALC"
+               READ EMPLOYEE-FILE
+                   AT END MOVE 'Y' TO WS-EOF-FLAG
+               END-READ
+           END-PERFORM.
+       
+       CALCULATE-PAY.
+           COMPUTE WS-NET-PAY = EMP-SALARY * (1 - WS-TAX-RATE).
+       
+       WRITE-PAYROLL.
+           WRITE PAYROLL-RECORD FROM EMPLOYEE-RECORD.
+       
+       CLEANUP.
+           CLOSE EMPLOYEE-FILE
+           CLOSE PAYROLL-FILE.
