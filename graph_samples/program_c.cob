@@ -1,0 +1,8 @@
+IDENTIFICATION DIVISION.
+       PROGRAM-ID. PROGRAM-C.
+       
+       PROCEDURE DIVISION.
+       PROCESS.
+           CALL "PROGRAM-D"
+           CALL "PROGRAM-A"
+           STOP RUN.

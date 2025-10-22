@@ -42,6 +42,43 @@ python cobol_analyzer.py ./cobol_files --both
 - Does not parse COPY books inline
 - Regex-based parsing (not full AST)
 
+## 📊 Dependency Graph Visualization
+
+Visualize program dependencies and relationships:
+```bash
+# Generate dependency graphs
+python cobol_analyzer.py ./cobol_files --graph
+
+# Generate all outputs (reports + graphs)
+python cobol_analyzer.py ./cobol_files --all
+```
+
+### Graph Types
+
+- **Detailed Graph**: Shows programs (squares), files (circles), all relationships
+- **Calls Only**: Shows just program-to-program dependencies
+- **Simple Graph**: Lightweight visualization
+
+### Features
+
+- Color-coded nodes (programs vs files)
+- Node size based on lines of code
+- Detects circular dependencies
+- Exports to PNG and DOT format
+
+### Example Output
+
+![Dependency Graph](screenshots/dependency_graph.png)
+
+## 🔍 Circular Dependency Detection
+
+The tool automatically detects and reports circular dependencies:
+```
+⚠️  Found 2 circular dependencies:
+   → PROGRAM-A -> PROGRAM-C -> PROGRAM-A
+   → PROGRAM-B -> PROGRAM-D -> PROGRAM-B
+```
+
 ## Future Enhancements
 
 - Dependency graph visualization
